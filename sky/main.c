@@ -4,7 +4,7 @@
 #include <strings.h>
 
 
-#define N		4
+#define N		6
 #define TOP		0
 #define BOT		1
 #define LEFT	2
@@ -23,6 +23,8 @@ void	print_sol(t_meta *data)
 	int j;
 
 	int k = 0;
+	printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+	printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 	printf("  ");
 	while (k < N)
 		printf ("\e[1;34m%d \e[1;0m", data->clues[TOP][k++]);
@@ -129,13 +131,11 @@ int	check_left_right(t_meta *data, int idx)
 	{
 		if (data->map[i] > high)
 		{
-			printf("high= %d, i=%d\n", high, i);
 			high = data->map[i];
 			seen++;
 		}
 		i++;
 	}
-	printf("seen %d, high %d \n", seen, high);
 	if (idx % N == N - 1)
 			return (seen == data->clues[LEFT][idx / N] ? 1 : 0);
 	return (seen <= data->clues[LEFT][idx / N] ? 1 : 0);
@@ -146,7 +146,6 @@ int	check_right_left(t_meta *data, int idx)
 	int seen = 0;
 	int high = 0;
 	int i = ((idx / N) * N) + N - 1;
-	printf("faulty bastard = %d\n", i);
 
 	while (i >= ((idx / N) * N))
 	{
@@ -157,7 +156,6 @@ int	check_right_left(t_meta *data, int idx)
 		}
 		i--;
 	}
-	printf("right left .seen %d, high %d \n", seen, high);
 	return (seen == data->clues[RIGHT][idx / N] ? 1 : 0);
 }
 
@@ -187,9 +185,7 @@ int check_bot_top(t_meta *data, int idx)
 	int high = 0;
 	int i = idx % N  + ((N - 1) * N);
 
-
-	printf("faultypute: %d\n", i);
-	while (i >= idx)
+	while (i >= (idx % N))
 	{
 		if (data->map[i] > high)
 		{
@@ -198,13 +194,12 @@ int check_bot_top(t_meta *data, int idx)
 		}
 		i -= N;
 	}
-	printf("bot  top .seen %d, high %d \n", seen, high);
 	return (seen == data->clues[BOT][idx % N] ? 1 : 0);
 }
 
 int	try_piece(t_meta *data, int idx)
 {
-	int spam = 1;
+	int spam = 0;
 	if (!check_double_col(&data->map[idx % N]))
 		return (0);
 	else if (spam)
@@ -237,7 +232,6 @@ int	try_piece(t_meta *data, int idx)
 			printf("bot top VALID\n");
 	}
 
-	printf("try VALID\n");
 	return (1);
 }
 
@@ -248,16 +242,14 @@ int solve(t_meta *data, int idx)
 	
 	if (idx >= (N * N))
 		return (1);
-	while (piece <= 4)
+	while (piece <= N)
 	{
-		
-	
 		data->map[idx] = piece;
-
-	printf("================== \\/ \\/ \\/ \\/ ========\n");
-	print_sol(data);
+	//printf("================== \\/ \\/ \\/ \\/ ========\n");
+//	print_sol(data);
 	char buff[2];
-	read(0, buff, 1);
+//	usleep(2000);	
+//	read(0, buff, 1);
 		
 		if (try_piece(data, idx))
 		{
